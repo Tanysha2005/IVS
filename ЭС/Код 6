@@ -1,44 +1,68 @@
 ; Экспертная система: Выбор языка программирования
-; старт
+
 (defrule start
-  =>
-  (printout t "Хотите разрабатывать веб-сайты? (yes/no): ")
-  (assert (web (read))))
-  
-; правила ветвления 
+   =>
+   (printout t "Хотите разрабатывать веб-сайты? (yes/no): ")
+   (assert (web (read))))
+
+
+(defrule web-invalid
+   ?f <- (web ?ans&~yes&~no)
+   =>
+   (retract ?f) ; удаляем неправильный факт из памяти
+   (printout t "Ошибка: Пожалуйста, введите только 'yes' или 'no'." crlf)
+   (printout t "Хотите разрабатывать веб-сайты? (yes/no): ")
+   (assert (web (read))))
+
+(defrule design-invalid
+   ?f <- (design ?ans&~yes&~no)
+   =>
+   (retract ?f)
+   (printout t "Ошибка: Пожалуйста, введите только 'yes' или 'no'." crlf)
+   (printout t "Вам нравится визуальный дизайн и интерфейсы? (yes/no): ")
+   (assert (design (read))))
+
+(defrule games-invalid
+   ?f <- (games ?ans&~yes&~no)
+   =>
+   (retract ?f)
+   (printout t "Ошибка: Пожалуйста, введите только 'yes' или 'no'." crlf)
+   (printout t "Хотите создавать видеоигры? (yes/no): ")
+   (assert (games (read))))
+
 (defrule web-yes
-  (web yes)
-  =>
-  (printout t "Вам нравится визуальный дизайн и интерфейсы? (yes/no): ")
-  (assert (design (read))))
+   (web yes)
+   =>
+   (printout t "Вам нравится визуальный дизайн и интерфейсы? (yes/no): ")
+   (assert (design (read))))
 
 (defrule web-no
-  (web no)
-  =>
-  (printout t "Хотите создавать видеоигры? (yes/no): ")
-  (assert (games (read))))
+   (web no)
+   =>
+   (printout t "Хотите создавать видеоигры? (yes/no): ")
+   (assert (games (read))))
 
-; выводы советов 
+; 
 (defrule frontend
-  (design yes)
-  =>
-  (printout t "экспертный совет:" crlf)
-  (printout t "Вам стоит изучить JavaScript" crlf))
+   (design yes)
+   =>
+   (printout t "экспертный совет:" crlf)
+   (printout t "Вам стоит изучить JavaScript" crlf))
 
 (defrule backend
-  (design no)
-  =>
-  (printout t "экспертный совет:" crlf)
-  (printout t "Вам стоит изучить Python или PHP" crlf))
+   (design no)
+   =>
+   (printout t "экспертный совет:" crlf)
+   (printout t "Вам стоит изучить Python или PHP" crlf))
 
 (defrule games-yes
-  (games yes)
-  =>
-  (printout t "экспертный совет:" crlf)
-  (printout t "Вам стоит изучить C# или C++" crlf))
+   (games yes)
+   =>
+   (printout t "экспертный совет:" crlf)
+   (printout t "Вам стоит изучить C# или C++" crlf))
 
 (defrule games-no
-  (games no)
-  =>
-  (printout t "экспертный совет:" crlf)
-  (printout t "Вам стоит изучить Python для ИИ или Prolog для сложных логических задач" crlf))
+   (games no)
+   =>
+   (printout t "экспертный совет:" crlf)
+   (printout t "Вам стоит изучить Python для ИИ или Prolog для сложных логических задач" crlf))
